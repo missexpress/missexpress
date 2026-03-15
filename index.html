@@ -4,86 +4,111 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Miss Express | Mensajería con rostro de mujer | Liberia, Guanacaste.</title>
+  <title>Miss Express | Mensajería con rostro de mujer | Liberia, Guanacaste</title>
   <meta name="description" content="Mensajería local en Liberia, Guanacaste: entregas rápidas, seguras y con atención humana." />
   <meta name="robots" content="index, follow" />
 
-  <link rel="icon" href="/favicon.png">
+  <meta name="theme-color" content="#f205cb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Miss Express" />
 
-  <!-- Estilos globales -->
+  <link rel="icon" href="/favicon.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <div class="banner">
+      <p class="kicker">📍 Liberia, Guanacaste</p>
       <h1>Miss Express</h1>
-      <p>Mensajería con rostro de mujer</p>
+      <p class="lead">Mensajería con rostro de mujer, rápida y segura.</p>
+
+      <div class="hero-actions">
+        <a class="btn primary" href="https://forms.gle/9q7u6is7NGyQaYtt6" target="_blank" rel="noopener noreferrer">
+          Hacer un pedido
+        </a>
+        <a class="btn" href="https://wa.me/50661949102" target="_blank" rel="noopener noreferrer">
+          Escribir por WhatsApp
+        </a>
+      </div>
     </div>
 
     <nav aria-label="Navegación principal">
       <ul class="menu">
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#beneficios">Beneficios</a></li>
         <li><a href="#contacto">Contacto</a></li>
-        <li><a href="#pedidos">Pedidos</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <!-- INICIO -->
-    <section id="inicio">
+    <section id="inicio" class="card reveal">
       <h2>¿Necesitas enviar algo urgente?</h2>
       <p>
-        Miss Express es una empresa de mensajería local ubicada en Liberia, Guanacaste,
-        creada para facilitarte la vida con entregas rápidas, seguras y con un toque humano.
+        Te ayudamos con entregas locales en Liberia para que no pierdas tiempo. Nuestro enfoque es humano,
+        puntual y confiable para que cada encomienda llegue como debe llegar.
       </p>
+
+      <div class="stats" aria-label="Indicadores del servicio">
+        <article>
+          <p class="stat-number">+300</p>
+          <p class="stat-text">Entregas locales gestionadas</p>
+        </article>
+        <article>
+          <p class="stat-number">Mismo día</p>
+          <p class="stat-text">Atención para pedidos urgentes</p>
+        </article>
+        <article>
+          <p class="stat-number">100%</p>
+          <p class="stat-text">Atención personalizada</p>
+        </article>
+      </div>
     </section>
 
-    <!-- SERVICIOS -->
-    <section id="servicios">
+    <section id="servicios" class="card reveal">
       <h2>Servicios</h2>
-      <ul>
-        <li>Entregas locales en Liberia</li>
-        <li>Recibo y envío de encomiendas</li>
-        <li>Compras y traslado</li>
-        <li>Servicios personalizados</li>
+      <div class="services-grid">
+        <article class="service-item">
+          <h3>🚚 Entregas locales</h3>
+          <p>Recolectamos y entregamos dentro de Liberia con seguimiento por WhatsApp.</p>
+        </article>
+        <article class="service-item">
+          <h3>📦 Encomiendas</h3>
+          <p>Recibo y envío seguro de paquetes para personas y pequeños negocios.</p>
+        </article>
+        <article class="service-item">
+          <h3>🛍️ Compras y traslados</h3>
+          <p>Hacemos compras puntuales y llevamos lo que necesitas hasta tu ubicación.</p>
+        </article>
+        <article class="service-item">
+          <h3>✨ Servicio personalizado</h3>
+          <p>Nos adaptamos a tus necesidades con trato cercano y responsable.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="beneficios" class="card reveal">
+      <h2>¿Por qué elegir Miss Express?</h2>
+      <ul class="benefits">
+        <li>Atención real por WhatsApp, sin bots.</li>
+        <li>Comunicación clara durante todo el pedido.</li>
+        <li>Servicio local con conocimiento de la zona.</li>
+        <li>Ideal para hogares, emprendedoras y comercios.</li>
       </ul>
     </section>
 
-    <!-- CONTACTO -->
-    <section id="contacto">
+    <section id="contacto" class="card reveal">
       <h2>Contacto</h2>
-      <p>Dirección: Liberia, Barrio Los Ángeles.</p>
-      <p>Teléfono: <a href="tel:+50661949102">(506) 6194 9102</a></p>
-      <p>Email: <a href="mailto:missexpress.net@gmail.com">missexpress.net@gmail.com</a></p>
-    </section>
-
-    <!-- PEDIDOS -->
-    <section id="pedidos">
-      <h2>Pedidos</h2>
-
-      <p>Rellená este formulario:</p>
-      <p>
-        <a class="btn primary"
-           href="https://forms.gle/9q7u6is7NGyQaYtt6"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Abrir formulario de pedidos en Google Forms">
-          Abrir formulario de pedidos
-        </a>
+      <p><strong>Dirección:</strong> Liberia, Barrio Los Ángeles.</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+50661949102">(506) 6194 9102</a></p>
+      <p><strong>Email:</strong> <a href="mailto:missexpress.net@gmail.com">missexpress.net@gmail.com</a></p>
+      <p class="install-tip" id="installTip" hidden>
+        📲 Tip: Instalá esta app en tu celular para abrirla como una aplicación.
       </p>
-
-      <p>💬 O escribinos directo al WhatsApp:</p>
-      <p>
-        <a class="btn"
-           href="https://wa.me/50661949102"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Escribir por WhatsApp al 50661949102">
-          Escribir por WhatsApp (506 6194 9102)
-        </a>
-      </p>
-
-      <p>💖 Miss Express es servicio con alma. Personal, seguro y con atención real.</p>
     </section>
   </main>
 
@@ -93,7 +118,6 @@
     </div>
   </footer>
 
-  <!-- JS global -->
   <script src="script.js"></script>
 </body>
 </html>
