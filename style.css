@@ -154,7 +154,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg-main); color: var
 
 /* ── BADGES ── */
 .badges { background: var(--bg-sec); padding: 16px 24px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.badge { background: var(--bg-main); border: 2px solid var(--fuc-mid); border-radius: 50px; padding: 9px 18px; font-size: 13px; font-weight: 800; color: var(--fucsia); display: flex; align-items: center; gap: 8px; transition: all .2s; cursor: default; }
+.badge { background: var(--bg-main); border: 2px solid var(--fuc-mid); border-radius: 50px; padding: 9px 18px; font-size: 13px; font-weight: 800; color: #b5007c; display: flex; align-items: center; gap: 8px; transition: all .2s; cursor: default; }
 .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fucsia); flex-shrink: 0; }
 .badge:hover { background: var(--fucsia); color: var(--bg-main); border-color: var(--fucsia); transform: translateY(-3px); }
 .badge:hover .badge-dot { background: var(--bg-main); }
