@@ -31,21 +31,31 @@
   <link rel="preload" href="https://fonts.gstatic.com/s/nunito/v32/XRXV3I6Li01BKofINeaBTMnFcQ.woff2" as="font" type="font/woff2" crossorigin/>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap"/></noscript>
-  <link rel="stylesheet" href="estilo.css"/>
+  <style>
+:root{--rosa:#B8006B}
+body{margin:0;font-family:'Nunito',sans-serif;background:#FDE8F5;color:#7A0050}
+a{text-decoration:none}
+h1,h2,h3,p{margin:0}
+@keyframes brillito { 0%,100% { opacity:.35; transform:scale(.6) rotate(0deg); } 50% { opacity:1; transform:scale(1.15) rotate(12deg); } }
+.brill { position:absolute; pointer-events:none; animation: brillito 2.6s ease-in-out infinite; }
+.lima-legible{color:#276A00}
+.icon-lima-border{stroke:#3C8C00;stroke-width:2.6}
+.icon-lima-fill{stroke:#76FF03;stroke-width:1.8}
+  </style>
 </head>
 <body>
 <div style="width:100%;background:#FDE8F5;display:flex;flex-direction:column">
 
 <!-- FRANJA DE RECLUTAMIENTO -->
-<div style="background:#76FF03;padding:9px 24px;text-align:center;font-size:13px;font-weight:800;color:#5B0078">
+<aside aria-label="Reclutamiento de repartidoras" style="background:#76FF03;padding:9px 24px;text-align:center;font-size:13px;font-weight:800;color:#5B0078">
   Estamos reclutando repartidoras en Liberia ·
   <a href="https://app.missexpress.net" style="color:#A000C8;text-decoration:underline">Registrate aquí</a>
-</div>
+</aside>
 
 <!-- NAV -->
 <header style="background:linear-gradient(90deg,#FF0090,#A000C8);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 32px;box-sizing:border-box">
   <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:88px;height:88px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0"><img src="img/Logo.webp" alt="Miss Express" style="position:absolute;width:137.4%;height:auto;max-width:none;left:-18.7%;top:-16.2%;display:block"></div>
+    <div style="width:88px;height:88px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0"><img src="img/Logo.webp" alt="Miss Express" width="154" height="154" style="position:absolute;width:137.4%;height:auto;max-width:none;left:-18.7%;top:-16.2%;display:block"></div>
   </div>
   <nav style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
     <a href="#inicio" style="color:#76FF03;font-size:13px;font-weight:800;padding:8px 14px">Inicio</a>
@@ -56,6 +66,7 @@
   </nav>
 </header>
 
+<main>
 <!-- HERO -->
 <section id="inicio" style="background:linear-gradient(160deg,#FDE8F5 0%,#EDD6F5 50%,#F5D6EE 100%);padding:80px 48px 56px;box-sizing:border-box;position:relative;overflow:hidden">
   <div class="brill" style="top:8%;left:5%;animation-delay:0s" aria-hidden="true">
@@ -80,33 +91,33 @@
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:48px">
       <div style="flex:1 1 420px;display:flex;flex-direction:column;gap:20px;align-items:flex-start">
         <span style="background:rgba(160,0,200,.1);color:#A000C8;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border-radius:50px;border:1.5px solid rgba(160,0,200,.2)">Logística · Entregas · Tecnología</span>
-        <h1 style="font-family:'Pacifico',cursive;font-size:58px;line-height:1.15;color:#FF0090">Movemos negocios. <span style="color:#A000C8">Conectamos oportunidades.</span></h1>
+        <h1 style="font-family:'Pacifico',cursive;font-size:58px;line-height:1.15;color:var(--rosa)">Movemos negocios. <span style="color:#A000C8">Conectamos oportunidades.</span></h1>
         <p class="lima-legible" style="font-size:18px;line-height:1.7;font-weight:700;max-width:480px">Soluciones logísticas y de entrega respaldadas por tecnología en Liberia, Guanacaste.</p>
         <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-          <a href="https://wa.me/50661949102" style="background:#FF0090;color:#FDE8F5;font-size:16px;font-weight:900;padding:17px 32px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Solicitar cotización</a>
-          <a href="#plataforma" style="background:#F5D6EE;color:#FF0090;font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;border:2px solid #FF4DB0">Conocer la plataforma</a>
+          <a href="https://wa.me/50661949102" style="background:var(--rosa);color:#FDE8F5;font-size:16px;font-weight:900;padding:17px 32px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Solicitar cotización</a>
+          <a href="#plataforma" style="background:#F5D6EE;color:var(--rosa);font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;border:2px solid #FF4DB0">Conocer la plataforma</a>
         </div>
       </div>
       <div style="flex:1 1 400px;max-width:460px;border-radius:28px;border:4px solid #A000C8;overflow:hidden;box-shadow:0 20px 60px rgba(160,0,200,.25),0 0 0 6px rgba(160,0,200,.08)">
-        <img src="img/Portada.webP.webp" alt="Repartidora, moto rosada y bodega de Miss Express" style="width:100%;height:auto;display:block">
+        <img src="img/Portada-960.webp" srcset="img/Portada-640.webp 640w, img/Portada-960.webp 960w, img/Portada.webP.webp 1280w" sizes="(max-width:560px) calc(100vw - 104px), 452px" width="960" height="540" fetchpriority="high" decoding="async" alt="Repartidora, moto rosada y bodega de Miss Express" style="width:100%;height:auto;display:block">
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:40px">
       <a href="#empresas" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#EDD6F5;border:2px solid #C87FE0;border-radius:16px;padding:12px 6px;min-width:0">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><g class="icon-lima-border"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"></path><path d="M3 8l9 5 9-5M12 13v8"></path></g><g class="icon-lima-fill"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"></path><path d="M3 8l9 5 9-5M12 13v8"></path></g></svg>
-        <span style="font-size:11px;font-weight:900;color:#FF0090;line-height:1.3">Logística empresarial</span>
+        <span style="font-size:11px;font-weight:900;color:var(--rosa);line-height:1.3">Logística empresarial</span>
       </a>
       <a href="#cobertura" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#EDD6F5;border:2px solid #C87FE0;border-radius:16px;padding:12px 6px;min-width:0">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><g class="icon-lima-border"><circle cx="6" cy="17" r="3"></circle><circle cx="18" cy="17" r="3"></circle><path d="M9 17h6M6 14l3-7h4l2 4h3"></path></g><g class="icon-lima-fill"><circle cx="6" cy="17" r="3"></circle><circle cx="18" cy="17" r="3"></circle><path d="M9 17h6M6 14l3-7h4l2 4h3"></path></g></svg>
-        <span style="font-size:11px;font-weight:900;color:#FF0090;line-height:1.3">Mensajería</span>
+        <span style="font-size:11px;font-weight:900;color:var(--rosa);line-height:1.3">Mensajería</span>
       </a>
       <a href="#plataforma" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#EDD6F5;border:2px solid #C87FE0;border-radius:16px;padding:12px 6px;min-width:0">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><g class="icon-lima-border"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M11 18h2"></path></g><g class="icon-lima-fill"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M11 18h2"></path></g></svg>
-        <span style="font-size:11px;font-weight:900;color:#FF0090;line-height:1.3">Nuestra plataforma</span>
+        <span style="font-size:11px;font-weight:900;color:var(--rosa);line-height:1.3">Nuestra plataforma</span>
       </a>
       <a href="#red" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#EDD6F5;border:2px solid #C87FE0;border-radius:16px;padding:12px 6px;min-width:0">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><g class="icon-lima-border"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></g><g class="icon-lima-fill"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></g></svg>
-        <span style="font-size:11px;font-weight:900;color:#FF0090;line-height:1.3">Únete a la red</span>
+        <span style="font-size:11px;font-weight:900;color:var(--rosa);line-height:1.3">Únete a la red</span>
       </a>
     </div>
   </div>
@@ -128,27 +139,27 @@
   </div>
   <div style="max-width:1100px;margin:0 auto;position:relative;z-index:2">
     <p style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#A000C8;margin-bottom:16px">Logística empresarial</p>
-    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:#FF0090;line-height:1.25;margin-bottom:12px">Paquetería, recepción y gestión de carga</h2>
+    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:var(--rosa);line-height:1.25;margin-bottom:12px">Paquetería, recepción y gestión de carga</h2>
     <p style="font-size:15px;line-height:1.75;font-weight:600;color:#700090;max-width:620px;margin-bottom:36px">Contamos con bodega propia en Liberia para recibir, guardar y despachar paquetes, con repartidoras que los llevan hasta la puerta de tu cliente.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
       <div style="background:#F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">1</div>
-        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:#FF0090;margin-bottom:6px">Recibimos</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:var(--rosa);margin-bottom:6px">Recibimos</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Tus paquetes llegan a nuestra bodega en Liberia.</p>
       </div>
       <div style="background:#F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">2</div>
-        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:#FF0090;margin-bottom:6px">Organizamos</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:var(--rosa);margin-bottom:6px">Organizamos</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Los clasificamos y preparamos para su entrega.</p>
       </div>
       <div style="background:#F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">3</div>
-        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:#FF0090;margin-bottom:6px">Entregamos</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:var(--rosa);margin-bottom:6px">Entregamos</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Nuestras repartidoras los llevan a domicilio.</p>
       </div>
     </div>
     <div style="margin-top:8px">
-      <a href="https://wa.me/50661949102" style="display:inline-block;background:#FF0090;color:#FDE8F5;font-size:16px;font-weight:900;padding:16px 32px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Solicitar cotización</a>
+      <a href="https://wa.me/50661949102" style="display:inline-block;background:var(--rosa);color:#FDE8F5;font-size:16px;font-weight:900;padding:16px 32px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Solicitar cotización</a>
     </div>
   </div>
 </section>
@@ -169,19 +180,19 @@
   </div>
   <div style="max-width:1100px;margin:0 auto;position:relative;z-index:2">
     <p style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#A000C8;margin-bottom:16px">Mensajería</p>
-    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:#FF0090;line-height:1.25;margin-bottom:28px">Entregas y distribución</h2>
+    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:var(--rosa);line-height:1.25;margin-bottom:28px">Entregas y distribución</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px;align-items:start">
       <div>
         <p style="font-size:15px;line-height:1.8;font-weight:600;color:#700090;margin-bottom:16px">Cubrimos toda la ciudad de <strong>Liberia y sus alrededores</strong>. También realizamos entregas hacia otras zonas de Guanacaste por encomiendas coordinadas con las Terminales de Autobús.</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">Santa Cruz</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">Nicoya</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">Cañas</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">La Cruz</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">Filadelfia</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">El Coco</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">Aguas Claras</div>
-          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:#FF0090;text-align:center">Upala</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">Santa Cruz</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">Nicoya</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">Cañas</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">La Cruz</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">Filadelfia</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">El Coco</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">Aguas Claras</div>
+          <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--rosa);text-align:center">Upala</div>
         </div>
       </div>
       <div style="background:linear-gradient(135deg,#FF0090,#A000C8);border-radius:24px;padding:32px 26px;display:flex;flex-direction:column;gap:12px;align-items:flex-start">
@@ -192,9 +203,9 @@
       </div>
     </div>
     <div style="margin-top:28px;background:#FDE8F5;border:2px solid #F5D6EE;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:18px">
-      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding-bottom:18px;border-bottom:1.5px solid #F5D6EE"><div style="font-weight:900;font-size:13px;color:#FF0090;min-width:200px">Días de servicio</div><div style="font-size:14px;font-weight:600;color:#700090">Lunes a Viernes</div></div>
-      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding-bottom:18px;border-bottom:1.5px solid #F5D6EE"><div style="font-weight:900;font-size:13px;color:#FF0090;min-width:200px">Horario regular</div><div style="font-size:14px;font-weight:600;color:#700090">8:00 a.m. – 5:00 p.m.</div></div>
-      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start"><div style="font-weight:900;font-size:13px;color:#FF0090;min-width:200px">Pedidos muy tempranos</div><div style="font-size:14px;font-weight:600;color:#700090">Avisar la noche anterior para coordinar</div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding-bottom:18px;border-bottom:1.5px solid #F5D6EE"><div style="font-weight:900;font-size:13px;color:var(--rosa);min-width:200px">Días de servicio</div><div style="font-size:14px;font-weight:600;color:#700090">Lunes a Viernes</div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding-bottom:18px;border-bottom:1.5px solid #F5D6EE"><div style="font-weight:900;font-size:13px;color:var(--rosa);min-width:200px">Horario regular</div><div style="font-size:14px;font-weight:600;color:#700090">8:00 a.m. – 5:00 p.m.</div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start"><div style="font-weight:900;font-size:13px;color:var(--rosa);min-width:200px">Pedidos muy tempranos</div><div style="font-size:14px;font-weight:600;color:#700090">Avisar la noche anterior para coordinar</div></div>
     </div>
   </div>
 </section>
@@ -222,7 +233,7 @@
       <a href="mailto:info@missexpress.net" style="margin-top:8px;background:#76FF03;color:#A000C8;font-size:15px;font-weight:900;padding:15px 26px;border-radius:50px;box-shadow:0 5px 0 #4DB300">Avisarme del lanzamiento</a>
     </div>
     <div style="flex:1 1 320px;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)">
-      <img src="img/Anuncio-3D-de-Miss-Express.webP.webp" alt="Concepto de la valla de lanzamiento: Descarga la App Miss Express" style="width:100%;height:auto;display:block">
+      <img src="img/Anuncio-960.webp" srcset="img/Anuncio-640.webp 640w, img/Anuncio-960.webp 960w, img/Anuncio-1280.webp 1280w" sizes="(max-width:560px) calc(100vw - 96px), 490px" width="960" height="640" loading="lazy" decoding="async" alt="Concepto de la valla de lanzamiento: Descarga la App Miss Express" style="width:100%;height:auto;display:block">
     </div>
   </div>
 </section>
@@ -243,42 +254,42 @@
   </div>
   <div style="max-width:1100px;margin:0 auto;position:relative;z-index:2">
     <p style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#A000C8;margin-bottom:16px">Repartidoras · Únete a la red</p>
-    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:#FF0090;line-height:1.25;margin-bottom:12px">Registro de repartidoras y futuras oportunidades</h2>
+    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:var(--rosa);line-height:1.25;margin-bottom:12px">Registro de repartidoras y futuras oportunidades</h2>
     <p style="font-size:15px;line-height:1.75;font-weight:600;color:#700090;max-width:600px;margin-bottom:28px">Hay dos formas de trabajar con nosotras. El registro es corto, desde tu celular y sin costo.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:28px">
       <div style="background:#FDE8F5;border:2px solid #FF4DB0;border-radius:22px;padding:24px 22px">
-        <span style="background:#FF0090;color:#FDE8F5;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:50px">Disponible ahora</span>
-        <h3 style="font-family:'Pacifico',cursive;font-size:18px;color:#FF0090;margin:12px 0 6px">Vacante en el equipo</h3>
+        <span style="background:var(--rosa);color:#FDE8F5;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:50px">Disponible ahora</span>
+        <h3 style="font-family:'Pacifico',cursive;font-size:18px;color:var(--rosa);margin:12px 0 6px">Vacante en el equipo</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Trabajo formal haciendo las entregas de nuestros clientes empresariales.</p>
       </div>
       <div style="background:#FDE8F5;border:2px solid #F5D6EE;border-radius:22px;padding:24px 22px">
         <span style="background:#76FF03;color:#A000C8;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:50px">Próximamente</span>
-        <h3 style="font-family:'Pacifico',cursive;font-size:18px;color:#FF0090;margin:12px 0 6px">Independiente con la app</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:18px;color:var(--rosa);margin:12px 0 6px">Independiente con la app</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Tomás pedidos desde la plataforma y generás ingresos por tus entregas.</p>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
       <div style="background:#FDE8F5;border:2px solid #F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">1</div>
-        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:#FF0090;margin-bottom:6px">Te registrás</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:var(--rosa);margin-bottom:6px">Te registrás</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Completás tus datos en app.missexpress.net.</p>
       </div>
       <div style="background:#FDE8F5;border:2px solid #F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">2</div>
-        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:#FF0090;margin-bottom:6px">Revisamos tu perfil</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:var(--rosa);margin-bottom:6px">Revisamos tu perfil</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Verificamos que cumplas los requisitos de la vacante.</p>
       </div>
       <div style="background:#FDE8F5;border:2px solid #F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">3</div>
-        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:#FF0090;margin-bottom:6px">Te contactamos</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:17px;color:var(--rosa);margin-bottom:6px">Te contactamos</h3>
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Te escribimos por WhatsApp cuando haya una vacante disponible en tu zona.</p>
       </div>
     </div>
     <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center">
-      <a href="https://app.missexpress.net" style="background:#FF0090;color:#FDE8F5;font-size:16px;font-weight:900;padding:16px 30px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Registrarme como repartidora</a>
+      <a href="https://app.missexpress.net" style="background:var(--rosa);color:#FDE8F5;font-size:16px;font-weight:900;padding:16px 30px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Registrarme como repartidora</a>
       <a href="mailto:info@missexpress.net" style="background:#76FF03;color:#A000C8;font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;box-shadow:0 5px 0 #4DB300">Tengo preguntas</a>
     </div>
-    <p style="font-size:12px;font-weight:700;color:#8A5A80;max-width:460px;line-height:1.5;margin:14px auto 0;text-align:center">Al registrarte aceptás que usemos tus datos para contactarte por vacantes y oportunidades de trabajo con Miss Express.</p>
+    <p style="font-size:12px;font-weight:700;color:#6B3A63;max-width:460px;line-height:1.5;margin:14px auto 0;text-align:center">Al registrarte aceptás que usemos tus datos para contactarte por vacantes y oportunidades de trabajo con Miss Express.</p>
   </div>
 </section>
 
@@ -297,10 +308,10 @@
     <div style="border:2px dashed #FF4DB0;border-radius:24px;padding:32px 28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px">
       <div style="flex:1 1 420px;display:flex;flex-direction:column;gap:8px;align-items:flex-start">
         <span style="background:#EDD6F5;color:#A000C8;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border-radius:50px">En evaluación</span>
-        <h3 style="font-family:'Pacifico',cursive;font-size:22px;color:#FF0090">Transporte seguro para mujeres</h3>
+        <h3 style="font-family:'Pacifico',cursive;font-size:22px;color:var(--rosa)">Transporte seguro para mujeres</h3>
         <p style="font-size:14px;line-height:1.7;font-weight:600;color:#700090;max-width:560px">Estamos evaluando esta iniciativa y queremos conocer tu opinión. Contanos si te interesaría y qué necesitarías para sentirte segura.</p>
       </div>
-      <a href="mailto:info@missexpress.net" style="background:#F5D6EE;color:#FF0090;font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;border:2px solid #FF4DB0">Quiero dar mi opinión</a>
+      <a href="mailto:info@missexpress.net" style="background:#F5D6EE;color:var(--rosa);font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;border:2px solid #FF4DB0">Quiero dar mi opinión</a>
     </div>
   </div>
 </section>
@@ -345,20 +356,21 @@
   </div>
   <div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;z-index:2">
     <p style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#A000C8">Estamos listas</p>
-    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:#FF0090">Hablemos</h2>
+    <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:var(--rosa)">Hablemos</h2>
     <p style="font-size:15px;line-height:1.75;font-weight:600;color:#700090;max-width:560px">Para cotizar, para unirte a la red o para coordinar una encomienda: te respondemos por WhatsApp.</p>
     <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:12px 0 24px">
-      <a href="https://wa.me/50661949102" style="background:#FF0090;color:#FDE8F5;font-size:16px;font-weight:900;padding:17px 30px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Solicitar cotización</a>
+      <a href="https://wa.me/50661949102" style="background:var(--rosa);color:#FDE8F5;font-size:16px;font-weight:900;padding:17px 30px;border-radius:50px;box-shadow:0 6px 0 #A000C8">Solicitar cotización</a>
       <a href="https://app.missexpress.net" style="background:#76FF03;color:#A000C8;font-size:15px;font-weight:900;padding:15px 26px;border-radius:50px;box-shadow:0 5px 0 #4DB300">Únete a la red</a>
-      <a href="https://forms.gle/9q7u6is7NGyQaYtt6" style="background:#F5D6EE;color:#FF0090;font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;border:2px solid #FF4DB0">Formulario de pedido</a>
+      <a href="https://forms.gle/9q7u6is7NGyQaYtt6" style="background:#F5D6EE;color:var(--rosa);font-size:15px;font-weight:900;padding:15px 24px;border-radius:50px;border:2px solid #FF4DB0">Formulario de pedido</a>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;width:100%">
-      <div style="background:rgba(253,232,245,.8);border:2px solid rgba(255,0,144,.2);border-radius:18px;padding:22px 16px"><strong style="display:block;font-size:11px;font-weight:900;color:#A000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">WhatsApp</strong><span style="font-size:14px;font-weight:800;color:#FF0090">(506) 6194-9102</span></div>
-      <div style="background:rgba(253,232,245,.8);border:2px solid rgba(255,0,144,.2);border-radius:18px;padding:22px 16px"><strong style="display:block;font-size:11px;font-weight:900;color:#A000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Correo</strong><span style="display:block;font-size:13px;font-weight:800;color:#FF0090">info@missexpress.net</span></div>
-      <div style="background:rgba(253,232,245,.8);border:2px solid rgba(255,0,144,.2);border-radius:18px;padding:22px 16px"><strong style="display:block;font-size:11px;font-weight:900;color:#A000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Ubicación</strong><span style="font-size:14px;font-weight:800;color:#FF0090">Liberia, Guanacaste, Costa Rica</span></div>
+      <div style="background:rgba(253,232,245,.8);border:2px solid rgba(255,0,144,.2);border-radius:18px;padding:22px 16px"><strong style="display:block;font-size:11px;font-weight:900;color:#A000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">WhatsApp</strong><span style="font-size:14px;font-weight:800;color:var(--rosa)">(506) 6194-9102</span></div>
+      <div style="background:rgba(253,232,245,.8);border:2px solid rgba(255,0,144,.2);border-radius:18px;padding:22px 16px"><strong style="display:block;font-size:11px;font-weight:900;color:#A000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Correo</strong><span style="display:block;font-size:13px;font-weight:800;color:var(--rosa)">info@missexpress.net</span></div>
+      <div style="background:rgba(253,232,245,.8);border:2px solid rgba(255,0,144,.2);border-radius:18px;padding:22px 16px"><strong style="display:block;font-size:11px;font-weight:900;color:#A000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Ubicación</strong><span style="font-size:14px;font-weight:800;color:var(--rosa)">Liberia, Guanacaste, Costa Rica</span></div>
     </div>
   </div>
 </section>
+</main>
 
 <footer style="background:linear-gradient(90deg,#FF0090,#A000C8);padding:20px 24px;text-align:center">
   <p style="color:#76FF03;font-size:13px;font-weight:700">© 2021–2026 Miss Express · Todos los derechos reservados.</p>
@@ -366,6 +378,6 @@
 
 </div>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>

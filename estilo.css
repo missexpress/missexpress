@@ -1,9 +1,0 @@
-/* ===== Miss Express · estilos ===== */
-body{margin:0;font-family:'Nunito',sans-serif;background:#FDE8F5;color:#7A0050}
-a{text-decoration:none}
-h1,h2,h3,p{margin:0}
-@keyframes brillito { 0%,100% { opacity:.35; transform:scale(.6) rotate(0deg); } 50% { opacity:1; transform:scale(1.15) rotate(12deg); } }
-.brill { position:absolute; pointer-events:none; animation: brillito 2.6s ease-in-out infinite; }
-.lima-legible { color:#76FF03; text-shadow:-1px -1px 0 #3C8C00,1px -1px 0 #3C8C00,-1px 1px 0 #3C8C00,1px 1px 0 #3C8C00,0 1px 5px rgba(60,140,0,.3); }
-.icon-lima-border{stroke:#3C8C00;stroke-width:2.6}
-.icon-lima-fill{stroke:#76FF03;stroke-width:1.8}

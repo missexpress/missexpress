@@ -1,5 +1,5 @@
 const CACHE = "missexpress-v2";
-const ASSETS = ["/", "/index.html", "/estilo.css", "/script.js", "/img/Logo.webp", "/img/favicon.webp"];
+const ASSETS = ["/", "/index.html", "/script.js", "/img/Logo.webp", "/img/favicon.webp"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
