@@ -1,25 +1,12 @@
-const CACHE = "missexpress-v2";
-const ASSETS = ["/", "/index.html", "/script.js", "/img/Logo.webp", "/img/favicon.webp"];
+// El sitio ya no usa service worker. Este archivo solo existe para que los navegadores que tenian
+// instalado el anterior (cuando el sitio era una PWA) lo desinstalen y borren su cache viejo.
+// Cuando haya pasado un tiempo (por ejemplo a mediados de 2027) se puede borrar.
+self.addEventListener("install", () => self.skipWaiting());
 
-self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
-});
-
-self.addEventListener("activate", e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
-  self.clients.claim();
-});
-
-self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, copy));
-        return res;
-      })
-      .catch(() => caches.match(e.request))
-  );
+self.addEventListener("activate", event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+    await self.registration.unregister();
+  })());
 });
