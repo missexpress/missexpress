@@ -37,6 +37,15 @@ h1,h2,h3,p{margin:0}
 h2.lima-legible{padding:12px 28px;border-radius:28px}
 .icon-lima-border{stroke:#3C8C00;stroke-width:2.6}
 .icon-lima-fill{stroke:#76FF03;stroke-width:1.8}
+/* encabezado en celular: logo y boton arriba, y una barra morada con los 4 enlaces (en computadora no cambia) */
+@media (max-width:700px){
+  header.hdr{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:10px 12px!important;padding:10px 24px 0!important}
+  header.hdr .hdr-logo{width:64px!important;height:64px!important}
+  header.hdr .hdr-cta-m{display:inline-block!important}
+  header.hdr .hdr-cta-d{display:none!important}
+  header.hdr .hdr-nav{grid-column:1/-1;flex-wrap:nowrap!important;justify-content:space-between;gap:0!important;margin:0 -24px;padding:0 24px;background:#A000C8}
+  header.hdr .hdr-nav a{padding:14px 6px!important}
+}
 /* la pagina se muestra cuando las fuentes estan listas (ver script al final del head) */
 html.fp{visibility:hidden}
   </style>
@@ -65,20 +74,21 @@ html.fp{visibility:hidden}
 <!-- FRANJA DE RECLUTAMIENTO -->
 <aside aria-label="Reclutamiento de expresistas" style="background:#76FF03;padding:9px 24px;text-align:center;font-size:13px;font-weight:800;color:#5B0078">
   Estamos reclutando expresistas en Liberia ·
-  <a href="https://app.missexpress.net/requisitos-repartidora" style="color:#A000C8;text-decoration:underline">Registrate aquí</a>
+  <a href="https://app.missexpress.net/requisitos-repartidora" style="color:#A000C8;text-decoration:underline;white-space:nowrap">Registrate aquí</a>
 </aside>
 
 <!-- NAV -->
-<header style="background:linear-gradient(90deg,#FF0090,#A000C8);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 32px;padding:12px max(32px,calc((100% - 1100px)/4 - 54px)) 12px max(32px,calc((100% - 1100px)/4 - 44px));box-sizing:border-box">
+<header class="hdr" style="background:linear-gradient(90deg,#FF0090,#A000C8);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 32px;padding:12px max(32px,calc((100% - 1100px)/4 - 54px)) 12px max(32px,calc((100% - 1100px)/4 - 44px));box-sizing:border-box">
   <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:88px;height:88px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0"><img src="img/Logo.webp" alt="Miss Express" width="154" height="154" style="position:absolute;width:137.4%;height:auto;max-width:none;left:-18.7%;top:-16.2%;display:block"></div>
+    <div class="hdr-logo" style="width:88px;height:88px;border-radius:50%;overflow:hidden;position:relative;flex-shrink:0"><img src="img/Logo.webp" alt="Miss Express" width="154" height="154" style="position:absolute;width:137.4%;height:auto;max-width:none;left:-18.7%;top:-16.2%;display:block"></div>
   </div>
-  <nav style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
+  <a class="hdr-cta-m" href="#red" style="display:none;background:#76FF03;color:#A000C8;font-size:13px;font-weight:900;padding:13px 20px;border-radius:50px;box-shadow:0 3px 0 #4DB300">Expresistas</a>
+  <nav class="hdr-nav" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
     <a href="#inicio" style="color:#76FF03;font-size:13px;font-weight:800;padding:8px 14px">Inicio</a>
     <a href="#empresas" style="color:#76FF03;font-size:13px;font-weight:800;padding:8px 14px">Empresas</a>
     <a href="#plataforma" style="color:#76FF03;font-size:13px;font-weight:800;padding:8px 14px">Nuestra app</a>
     <a href="#contacto" style="color:#76FF03;font-size:13px;font-weight:800;padding:8px 14px">Contacto</a>
-    <a href="#red" style="background:#76FF03;color:#A000C8;font-size:13px;font-weight:900;padding:10px 18px;border-radius:50px;box-shadow:0 3px 0 #4DB300">Expresistas</a>
+    <a class="hdr-cta-d" href="#red" style="background:#76FF03;color:#A000C8;font-size:13px;font-weight:900;padding:10px 18px;border-radius:50px;box-shadow:0 3px 0 #4DB300">Expresistas</a>
   </nav>
 </header>
 
