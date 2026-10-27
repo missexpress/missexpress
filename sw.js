@@ -1,5 +1,5 @@
-const CACHE = "missexpress-v1";
-const ASSETS = ["/", "/index.html", "/style.css", "/script.js", "/img/Logo.webp", "/img/app.webp", "/img/favicon.webp"];
+const CACHE = "missexpress-v2";
+const ASSETS = ["/", "/index.html", "/estilo.css", "/script.js", "/img/Logo.webp", "/img/favicon.webp"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -14,6 +14,12 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
