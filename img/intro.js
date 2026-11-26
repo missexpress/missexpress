@@ -386,8 +386,7 @@ const MissExpressSonido = (() => {
       AC.resume().then(() => {
         if (AC.state !== 'running') return;
         GESTOS.forEach(g => removeEventListener(g, desbloquear, true));
-        const t = (performance.now() - inicio) / 1000;
-        if (t < DURACION_REAL && !bus) partitura(t);
+        if (inicio) sonarSincronizado(false);
       }).catch(() => {});
     };
     GESTOS.forEach(g => addEventListener(g, desbloquear, true));
@@ -496,14 +495,29 @@ const MissExpressSonido = (() => {
     }
   }
 
+  // el sonido sigue al reloj real de la animación: espera a que el audio arranque de verdad
+  // (en frío puede tardar, sobre todo con audífonos Bluetooth) y descuenta el retraso de la salida
+  function sonarSincronizado(forzar) {
+    const desde = performance.now();
+    const ir = () => {
+      if (detenido || (bus && !forzar)) return;
+      if (AC.currentTime === 0 && performance.now() - desde < 1000) { setTimeout(ir, 10); return; }
+      const t = (performance.now() - inicio) / 1000 + (AC.outputLatency || AC.baseLatency || 0);
+      if (t < DURACION_REAL) partitura(t);
+    };
+    ir();
+  }
+
   return {
+    // se llama apenas carga la página, para que el audio ya esté listo cuando empiece la intro
+    preparar() { iniciar(); },
     reproducir() {
       inicio = performance.now(); detenido = false;
       const ac = iniciar(); if (!ac) return;
-      if (ac.state === 'running') partitura(0);
+      if (ac.state === 'running') sonarSincronizado(true);
       else {                                              // si está bloqueado, suena al primer toque
-        bus = null;
-        ac.resume().then(() => { if (ac.state === 'running' && !bus) partitura((performance.now() - inicio) / 1000); }).catch(() => {});
+        if (bus) { bus.disconnect(); bus = null; }
+        ac.resume().then(() => { if (ac.state === 'running') sonarSincronizado(false); }).catch(() => {});
       }
     },
     silenciar(si = true) {
@@ -522,8 +536,8 @@ let start = null, last = null, terminado = false, cerrada = false, fadeTimer = n
 
 function frame(now) {
   if (terminado) return;
-  if (start === null) { start = now; last = A_INICIO; }
-  const t = animDeReal((now - start) / 1000);
+  if (last === null) last = A_INICIO;
+  const t = animDeReal(Math.max(0, now - start) / 1000);
   const dt = Math.min(Math.max(t - last, 0), .05); last = t;
   render(t, dt);
   if (t >= A_FIN) { terminado = true; if (!VISTA) cerrar(300); return; }
@@ -543,8 +557,10 @@ function cerrar(espera = 0) {
   }, espera);
 }
 function play() {
-  start = null; terminado = false; particles = [];
+  last = null; terminado = false; particles = [];
   if (reduceMotion) { render(DURATION, 0); terminado = true; return; }   // solo llega aquí en la vista previa
+  // la animación y el sonido parten del mismo instante
+  start = performance.now();
   MissExpressSonido.reproducir();
   requestAnimationFrame(frame);
 }
@@ -568,6 +584,7 @@ function montar() {
   addEventListener('keydown', teclas);
   addEventListener('resize', alCambiarTamano);
   medir();
+  MissExpressSonido.preparar();
   // espera a que carguen las imágenes; si decode() falla o no existe (navegadores viejos), se usa el evento load
   const cargada = i => new Promise(r => { if (i.complete && i.naturalWidth) r(); else { i.onload = r; i.onerror = r; } });
   const lista = i => (i.decode ? i.decode().catch(() => cargada(i)) : cargada(i));
