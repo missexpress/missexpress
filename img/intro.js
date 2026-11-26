@@ -363,11 +363,34 @@ function render(t, dt) {
 const MissExpressSonido = (() => {
   let AC = null, salida = null, reverb = null, bus = null, ruidoBuf = null, inicio = 0, mute = false, detenido = false;
 
+  const A = window.AudioContext || window.webkitAudioContext;
+  // los navegadores bloquean el audio hasta el primer toque: al tocar, se desbloquea y se sincroniza
+  // iPhone y Firefox solo aceptan el toque al soltar el dedo (touchend / click), no al apoyarlo (pointerdown)
+  const GESTOS = ['touchend', 'click', 'keydown', 'pointerup'];
   function iniciar() {
     if (AC) return AC;
-    const A = window.AudioContext || window.webkitAudioContext;
     if (!A) return null;
-    AC = new A();
+    construir();
+    GESTOS.forEach(g => addEventListener(g, desbloquear, true));
+    return AC;
+  }
+  function desbloquear() {
+    if (detenido) { GESTOS.forEach(g => removeEventListener(g, desbloquear, true)); return; }   // la intro ya se cerró
+    // Safari: un audio creado antes del toque puede quedar mudo aunque se reanude, así que se crea de nuevo dentro del toque
+    if (AC.state !== 'running') { const viejo = AC; construir(); try { viejo.close(); } catch { /* ya cerrado */ } }
+    // un sonido vacío dentro del toque termina de desbloquear el audio en iPhone
+    const s = AC.createBufferSource(); s.buffer = AC.createBuffer(1, 1, AC.sampleRate); s.connect(AC.destination); s.start(0);
+    const ac = AC;
+    ac.resume().then(() => {
+      if (ac !== AC || ac.state !== 'running') return;
+      GESTOS.forEach(g => removeEventListener(g, desbloquear, true));
+      if (inicio) sonarSincronizado(false);
+    }).catch(() => {});
+  }
+  function construir() {
+    // en iPhone, sin esto el interruptor de silencio apaga el sonido de la página
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* Safari viejo */ }
+    AC = new A(); bus = null; ruidoBuf = null;
     salida = AC.createGain(); salida.gain.value = mute ? 0 : .9;
     const comp = AC.createDynamicsCompressor(); salida.connect(comp); comp.connect(AC.destination);
     reverb = AC.createConvolver();
@@ -375,22 +398,6 @@ const MissExpressSonido = (() => {
     for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3); }
     reverb.buffer = ir;
     const wet = AC.createGain(); wet.gain.value = .3; reverb.connect(wet); wet.connect(salida);
-    // los navegadores bloquean el audio hasta el primer toque: al tocar, se desbloquea y se sincroniza
-    // iPhone y Firefox solo aceptan el toque al soltar el dedo (touchend / click), no al apoyarlo (pointerdown)
-    const GESTOS = ['touchend', 'click', 'keydown', 'pointerup'];
-    const desbloquear = () => {
-      // en iPhone, sin esto el interruptor de silencio apaga el sonido de la página
-      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* Safari viejo */ }
-      // un sonido vacío dentro del toque termina de desbloquear el audio en iPhone
-      const s = AC.createBufferSource(); s.buffer = AC.createBuffer(1, 1, AC.sampleRate); s.connect(AC.destination); s.start(0);
-      AC.resume().then(() => {
-        if (AC.state !== 'running') return;
-        GESTOS.forEach(g => removeEventListener(g, desbloquear, true));
-        if (inicio) sonarSincronizado(false);
-      }).catch(() => {});
-    };
-    GESTOS.forEach(g => addEventListener(g, desbloquear, true));
-    return AC;
   }
   function ruido() {
     if (!ruidoBuf) {
