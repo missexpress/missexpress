@@ -480,6 +480,8 @@ const MissExpressSonido = (() => {
     if (ya(A_INICIO)) soplo(b, at(A_INICIO), .4, { f: 2500, f2: 7000, q: 4, v: .08, pico: .3, pan: .3, pan2: -.2 });
     // llega la moto: el scooter y un whoosh suave de izquierda al centro
     if (ya(1)) moto(b, at(1), dura(1, 2.5));
+    // si el toque llegó con la moto ya andando, que suene lo que le queda de recorrido
+    else if (realDeAnim(3.5) - offset > .3) moto(b, AC.currentTime + .03, realDeAnim(3.5) - offset);
     if (ya(1.2)) soplo(b, at(1.2), dura(1.2, 2), { f: 300, f2: 1400, q: .8, v: .18, pico: .4, pan: -.9, pan2: 0 });
     // aparece el logo: logo sonoro "Miss · Ex · press" en marimba
     if (ya(4.3)) {
