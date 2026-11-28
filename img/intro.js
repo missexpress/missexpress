@@ -358,65 +358,69 @@ function render(t, dt) {
   if (t < .3) { ctx.fillStyle = `rgba(252,242,251,${1 - t / .3})`; ctx.fillRect(0, 0, W, H); }
 }
 
-/* ===== Sonido Miss Express (Web Audio, sin archivos de audio) =====
-   Agregado para el sitio: detener() apaga el sonido si la intro se cierra antes de terminar. */
+/* ===== Sonido Miss Express =====
+   En el sitio suena el archivo intro-sonido.wav con un <audio>: en iPhone arranca con el toque sin fallar
+   y suena aunque el interruptor de silencio esté puesto (el Web Audio en vivo no).
+   Ese wav sale del sintetizador de abajo: si se cambia la partitura, abrir img/intro.html?grabar
+   (en la compu) descarga el intro-sonido.wav nuevo para reemplazar el de esta carpeta.
+   detener() apaga el sonido si la intro se cierra antes de terminar. */
 const MissExpressSonido = (() => {
-  let AC = null, salida = null, reverb = null, bus = null, ruidoBuf = null, inicio = 0, mute = false, detenido = false;
-  let alCambiar = () => {}, enToque = false;   // alCambiar avisa al botón; enToque: el audio ya se rehízo dentro de un toque
+  let AC = null, salida = null, reverb = null, bus = null, ruidoBuf = null;
+  let pista = null, inicio = 0, mute = false, detenido = false, alCambiar = () => {};
 
-  const A = window.AudioContext || window.webkitAudioContext;
-  // los navegadores bloquean el audio hasta el primer toque: al tocar, se desbloquea y se sincroniza
+  const O = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  // los navegadores bloquean el audio hasta el primer toque: al tocar, arranca en el punto donde va la animación
   // iPhone y Firefox solo aceptan el toque al soltar el dedo (touchend / click), no al apoyarlo (pointerdown)
   const GESTOS = ['touchend', 'click', 'keydown', 'pointerup'];
-  function iniciar() {
-    if (AC) return AC;
-    if (!A) return null;
-    construir();
-    GESTOS.forEach(g => addEventListener(g, desbloquear, true));
-    return AC;
-  }
-  function desbloquear() {
-    if (detenido) { GESTOS.forEach(g => removeEventListener(g, desbloquear, true)); return; }   // la intro ya se cerró
-    // (una sola vez: un toque dispara pointerup, touchend y click, y no hay que rehacerlo en cada uno)
-    if (!enToque) {
-      enToque = true;
-      // iPhone con el interruptor de silencio puesto (iOS sin navigator.audioSession): un audio HTML mudo
-      // dentro del toque pasa la página a modo "reproducción" y así el Web Audio sí suena
-      try { const m = new Audio(wavMudo()); m.setAttribute('playsinline', ''); m.play().catch(() => {}); } catch { /* sin <audio> */ }
-      // Safari: un audio creado antes del toque puede quedar mudo aunque se reanude, así que se crea de nuevo dentro del toque
-      if (AC.state !== 'running') { const viejo = AC; construir(); try { viejo.close(); } catch { /* ya cerrado */ } }
-    }
-    // un sonido vacío dentro del toque termina de desbloquear el audio en iPhone
-    const s = AC.createBufferSource(); s.buffer = AC.createBuffer(1, 1, AC.sampleRate); s.connect(AC.destination); s.start(0);
-    const ac = AC;
-    ac.resume().then(() => {
-      if (ac !== AC || ac.state !== 'running') return;
-      GESTOS.forEach(g => removeEventListener(g, desbloquear, true));
-      if (inicio) sonarSincronizado(false);
-    }).catch(() => {});
-  }
-  // 0,1 s de silencio en WAV (8 kHz, 8 bits), sin archivos aparte; la CSP del sitio lo permite con media-src data:
-  function wavMudo() {
-    const n = 800, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
-    const txt = (o, t) => { for (let i = 0; i < t.length; i++) b[o + i] = t.charCodeAt(i); };
-    txt(0, 'RIFF'); v.setUint32(4, 36 + n, true); txt(8, 'WAVEfmt '); v.setUint32(16, 16, true);
-    v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true);
-    v.setUint16(32, 1, true); v.setUint16(34, 8, true); txt(36, 'data'); v.setUint32(40, n, true); b.fill(128, 44);
-    return 'data:audio/wav;base64,' + btoa(String.fromCharCode.apply(null, b));
-  }
-  function construir() {
-    // en iPhone, sin esto el interruptor de silencio apaga el sonido de la página
-    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* Safari viejo */ }
-    AC = new A(); bus = null; ruidoBuf = null;
-    AC.onstatechange = () => alCambiar();
-    salida = AC.createGain(); salida.gain.value = mute ? 0 : .9;
+  const escuchar = si => GESTOS.forEach(g => (si ? addEventListener : removeEventListener)(g, intentar, true));
+
+  // sintetiza toda la partitura sin sonar y entrega el wav
+  function grabar(listo) {
+    if (!O) return;
+    const sr = 22050;                                                   // mono a 22 kHz: liviano y suficiente
+    AC = new O(1, Math.ceil(sr * (DURACION_REAL + 1)), sr);             // +1 s para la cola del eco
+    salida = AC.createGain(); salida.gain.value = .9;
     const comp = AC.createDynamicsCompressor(); salida.connect(comp); comp.connect(AC.destination);
     reverb = AC.createConvolver();
-    const n = Math.floor(AC.sampleRate * 2), ir = AC.createBuffer(2, n, AC.sampleRate);
+    const n = Math.floor(sr * 2), ir = AC.createBuffer(2, n, sr);
     for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3); }
     reverb.buffer = ir;
     const wet = AC.createGain(); wet.gain.value = .3; reverb.connect(wet); wet.connect(salida);
+    partitura(0);
+    AC.oncomplete = e => listo(wav(e.renderedBuffer));
+    const p = AC.startRendering(); if (p && p.catch) p.catch(() => {});
   }
+  // la grabación pasada a WAV de 16 bits, con el volumen llevado al máximo sin saturar (en el parlante del teléfono se oye bajo)
+  function wav(buf) {
+    const ch = buf.numberOfChannels, n = buf.length, bytes = n * ch * 2, v = new DataView(new ArrayBuffer(44 + bytes));
+    const txt = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+    txt(0, 'RIFF'); v.setUint32(4, 36 + bytes, true); txt(8, 'WAVEfmt '); v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true); v.setUint16(22, ch, true); v.setUint32(24, buf.sampleRate, true);
+    v.setUint32(28, buf.sampleRate * ch * 2, true); v.setUint16(32, ch * 2, true); v.setUint16(34, 16, true);
+    txt(36, 'data'); v.setUint32(40, bytes, true);
+    const datos = []; for (let c = 0; c < ch; c++) datos.push(buf.getChannelData(c));
+    let pico = 0; datos.forEach(d => { for (let i = 0; i < n; i++) pico = Math.max(pico, Math.abs(d[i])); });
+    const k = pico ? .9 / pico : 1;
+    for (let i = 0, o = 44; i < n; i++) for (let c = 0; c < ch; c++, o += 2) {
+      const x = Math.max(-1, Math.min(1, datos[c][i] * k)); v.setInt16(o, x < 0 ? x * 0x8000 : x * 0x7fff, true);
+    }
+    return v.buffer;
+  }
+  // arranca la pista en el segundo donde va la animación; si el navegador aún no deja, queda esperando el toque
+  function intentar() {
+    if (detenido) { escuchar(false); return; }   // la intro ya se cerró
+    if (!pista || !inicio || !pista.paused) return;
+    const ahora = () => (performance.now() - inicio) / 1000;
+    if (ahora() >= DURACION_REAL) { escuchar(false); return; }
+    try { pista.currentTime = ahora(); } catch { /* aún sin cargar: se ajusta al arrancar */ }
+    const p = pista.play();
+    if (p && p.then) p.then(() => {
+      escuchar(false);
+      if (detenido) { pista.pause(); return; }
+      if (Math.abs(pista.currentTime - ahora()) > .12) pista.currentTime = ahora();   // vuelve a sincronizar
+    }, () => {});
+  }
+
   function ruido() {
     if (!ruidoBuf) {
       const n = AC.sampleRate * 2; ruidoBuf = AC.createBuffer(1, n, AC.sampleRate);
@@ -522,43 +526,22 @@ const MissExpressSonido = (() => {
     }
   }
 
-  // el sonido sigue al reloj real de la animación: espera a que el audio arranque de verdad
-  // (en frío puede tardar, sobre todo con audífonos Bluetooth) y descuenta el retraso de la salida
-  function sonarSincronizado(forzar) {
-    const desde = performance.now();
-    const ir = () => {
-      if (detenido || (bus && !forzar)) return;
-      if (AC.currentTime === 0 && performance.now() - desde < 1000) { setTimeout(ir, 10); return; }
-      const t = (performance.now() - inicio) / 1000 + (AC.outputLatency || AC.baseLatency || 0);
-      if (t < DURACION_REAL) partitura(t);
-    };
-    ir();
-  }
-
   return {
-    // se llama apenas carga la página, para que el audio ya esté listo cuando empiece la intro
-    preparar() { iniciar(); },
-    reproducir() {
-      inicio = performance.now(); detenido = false;
-      const ac = iniciar(); if (!ac) return;
-      if (ac.state === 'running') sonarSincronizado(true);
-      else {                                              // si está bloqueado, suena al primer toque
-        if (bus) { bus.disconnect(); bus = null; }
-        ac.resume().then(() => { if (ac.state === 'running') sonarSincronizado(false); }).catch(() => {});
-      }
+    // se llama apenas carga la página, para que el sonido ya esté grabado cuando empiece la intro
+    preparar() {
+      if (pista) return;
+      pista = new Audio(new URL('intro-sonido.wav', base).href);
+      pista.preload = 'auto';
+      ['play', 'pause', 'ended'].forEach(ev => pista.addEventListener(ev, () => alCambiar()));
+      escuchar(true);
     },
-    silenciar(si = true) {
-      mute = si;
-      if (AC) salida.gain.setTargetAtTime(si ? 0 : .9, AC.currentTime, .02);
-      alCambiar();
-    },
-    // true si de verdad se está oyendo: desbloqueado y sin silenciar
-    suena() { return !!AC && AC.state === 'running' && !mute; },
+    grabar,
+    reproducir() { inicio = performance.now(); detenido = false; if (pista) pista.pause(); intentar(); },
+    silenciar(si = true) { mute = si; if (pista) pista.muted = si; alCambiar(); },
+    // true si de verdad se está oyendo: sonando y sin silenciar
+    suena() { return !!pista && !pista.paused && !mute; },
     alCambiar(fn) { alCambiar = fn; },
-    detener() {
-      detenido = true;
-      if (bus) { const viejo = bus; bus = null; viejo.gain.setTargetAtTime(0, AC.currentTime, .03); setTimeout(() => viejo.disconnect(), 400); }
-    },
+    detener() { detenido = true; escuchar(false); if (pista) pista.pause(); },
   };
 })();
 
@@ -598,6 +581,12 @@ function play() {
 
 // vista previa: tocar la pantalla vuelve a reproducir la animación
 if (VISTA) lienzo.addEventListener('click', play);
+// vista previa con ?grabar: descarga intro-sonido.wav, el sonido que usa el sitio
+if (VISTA && params.has('grabar')) MissExpressSonido.grabar(datos => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([datos], { type: 'audio/wav' })); a.download = 'intro-sonido.wav';
+  window.sonidoGrabado = a.href; a.click();
+});
 // botón para silenciar o volver a activar el sonido. Mientras el navegador no deja sonar (iPhone antes del
 // primer toque) se ve tachado, así tocarlo activa el sonido en vez de silenciarlo
 function pintarBoton() {
