@@ -28,7 +28,7 @@
   <link rel="icon" type="image/webp" href="/img/favicon.webp"/>
   <link rel="apple-touch-icon" href="/img/Logo.webp"/>
 
-  <link rel="preload" as="image" imagesrcset="img/Portada-640.webp 640w, img/Portada-960.webp 960w, img/Portada.webP.webp 1280w" imagesizes="(max-width:560px) calc(100vw - 104px), 452px" fetchpriority="high"/>
+  <link rel="preload" as="image" imagesrcset="img/Portada-640.webp 640w, img/Portada-960.webp 960w, img/Portada.webP.webp 1280w" imagesizes="(max-width:560px) calc(100vw - 56px), 452px" fetchpriority="high"/>
   <style>
 :root{--rosa:#FF0090;--morado:#A000C8}
 body{margin:0;font-family:'Nunito',sans-serif;background:#FDE8F5;color:#7A0050}
@@ -52,8 +52,22 @@ h2.lima-legible{padding:12px 28px;border-radius:28px}
 /* inicio en celular: el titulo se ajusta al ancho de la pantalla (antes se cortaba) y el bloque queda centrado */
 @media (max-width:700px){
   #inicio .hero-col{align-items:center!important;text-align:center}
-  #inicio h1{font-size:clamp(34px,calc((100vw - 96px)/6.2),58px)!important}
+  #inicio h1{font-size:clamp(34px,calc((100vw - 48px)/6.2),58px)!important}
   #inicio .hero-btns{justify-content:center}
+}
+/* pasos 1-2-3: en tablet van los tres en fila (antes quedaba uno suelto abajo); en celular, uno debajo del otro */
+.pasos{grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr))!important}
+/* el enlace de la franja verde: zona de toque mas alta sin agrandar la franja */
+.franja a{display:inline-block;padding:8px 0;margin:-8px 0}
+@media (max-width:700px){
+  /* secciones con el mismo margen lateral que el encabezado: mas ancho para el texto */
+  section{padding-left:24px!important;padding-right:24px!important}
+  .pasos{grid-template-columns:1fr!important}
+}
+/* accesos del inicio en celular chico: de 2 en 2, con letra un poco mas grande */
+@media (max-width:520px){
+  #inicio .accesos{grid-template-columns:repeat(2,1fr)!important}
+  #inicio .accesos span{font-size:12px!important}
 }
 /* la pagina se muestra cuando las fuentes estan listas (ver script al final del head) */
 html.fp{visibility:hidden}
@@ -87,7 +101,7 @@ html.fp{visibility:hidden}
 <div style="width:100%;background:#FDE8F5;display:flex;flex-direction:column">
 
 <!-- FRANJA DE RECLUTAMIENTO -->
-<aside aria-label="Reclutamiento de expresistas" style="background:#76FF03;padding:9px 24px;text-align:center;font-size:13px;font-weight:800;color:#5B0078">
+<aside class="franja" aria-label="Reclutamiento de expresistas" style="background:#76FF03;padding:9px 24px;text-align:center;font-size:13px;font-weight:800;color:#5B0078">
   Estamos reclutando expresistas en Liberia ·
   <a href="https://app.missexpress.net/requisitos-repartidora" style="color:#A000C8;text-decoration:underline;white-space:nowrap">Registrate aquí</a>
 </aside>
@@ -140,10 +154,10 @@ html.fp{visibility:hidden}
         </div>
       </div>
       <div style="flex:1 1 400px;max-width:460px;border-radius:28px;border:4px solid #A000C8;overflow:hidden;box-shadow:0 20px 60px rgba(160,0,200,.25),0 0 0 6px rgba(160,0,200,.08)">
-        <img src="img/Portada-960.webp" srcset="img/Portada-640.webp 640w, img/Portada-960.webp 960w, img/Portada.webP.webp 1280w" sizes="(max-width:560px) calc(100vw - 104px), 452px" width="960" height="540" fetchpriority="high" decoding="async" alt="Expresista, moto rosada y bodega de Miss Express" style="width:100%;height:auto;display:block">
+        <img src="img/Portada-960.webp" srcset="img/Portada-640.webp 640w, img/Portada-960.webp 960w, img/Portada.webP.webp 1280w" sizes="(max-width:560px) calc(100vw - 56px), 452px" width="960" height="540" fetchpriority="high" decoding="async" alt="Expresista, moto rosada y bodega de Miss Express" style="width:100%;height:auto;display:block">
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:40px">
+    <div class="accesos" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:40px">
       <a href="#empresas" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#EDD6F5;border:2px solid #C87FE0;border-radius:16px;padding:12px 6px;min-width:0">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><g class="icon-lima-border"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"></path><path d="M3 8l9 5 9-5M12 13v8"></path></g><g class="icon-lima-fill"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"></path><path d="M3 8l9 5 9-5M12 13v8"></path></g></svg>
         <span style="font-size:11px;font-weight:900;color:var(--morado);line-height:1.3">Logística empresarial</span>
@@ -182,7 +196,7 @@ html.fp{visibility:hidden}
     <p style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#A000C8;margin-bottom:16px">Logística empresarial</p>
     <h2 style="font-family:'Pacifico',cursive;font-size:38px;color:var(--rosa);line-height:1.25;margin-bottom:12px">Paquetería, recepción y gestión de carga</h2>
     <p style="font-size:15px;line-height:1.75;font-weight:600;color:#700090;max-width:620px;margin-bottom:36px">Contamos con bodega propia en Liberia para recibir, guardar y despachar paquetes, con expresistas que los llevan hasta la puerta de tu cliente.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px">
+    <div class="pasos" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px">
       <div style="background:#FFF2FA;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">1</div>
         <h3 style="font-family:'Pacifico',cursive;font-size:24px;color:var(--rosa);margin-bottom:6px">Recibimos</h3>
@@ -274,7 +288,7 @@ html.fp{visibility:hidden}
       <a href="mailto:info@missexpress.net" style="margin-top:8px;background:#76FF03;color:#A000C8;font-size:15px;font-weight:900;padding:15px 26px;border-radius:50px;box-shadow:0 5px 0 #4DB300">Avisarme del lanzamiento</a>
     </div>
     <div style="flex:1 1 320px;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)">
-      <img src="img/Anuncio-960.webp" srcset="img/Anuncio-640.webp 640w, img/Anuncio-960.webp 960w, img/Anuncio-1280.webp 1280w" sizes="(max-width:560px) calc(100vw - 96px), 490px" width="960" height="640" loading="lazy" decoding="async" alt="Concepto de la valla de lanzamiento: Descarga la App Miss Express" style="width:100%;height:auto;display:block">
+      <img src="img/Anuncio-960.webp" srcset="img/Anuncio-640.webp 640w, img/Anuncio-960.webp 960w, img/Anuncio-1280.webp 1280w" sizes="(max-width:700px) calc(100vw - 48px), 490px" width="960" height="640" loading="lazy" decoding="async" alt="Concepto de la valla de lanzamiento: Descarga la App Miss Express" style="width:100%;height:auto;display:block">
     </div>
   </div>
 </section>
@@ -309,7 +323,7 @@ html.fp{visibility:hidden}
         <p style="font-size:14px;line-height:1.65;font-weight:600;color:#700090">Tomás pedidos desde la plataforma y generás ingresos por tus entregas.</p>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px">
+    <div class="pasos" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px">
       <div style="background:#FFF2FA;border:2px solid #F5D6EE;border-radius:22px;padding:26px 22px">
         <div style="width:40px;height:40px;border-radius:50%;background:#76FF03;color:#A000C8;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 3px 0 #A000C8">1</div>
         <h3 style="font-family:'Pacifico',cursive;font-size:24px;color:var(--rosa);margin-bottom:6px">Te registrás</h3>
