@@ -53,7 +53,7 @@ const capa = document.createElement('div');
 capa.id = 'mx-intro';
 capa.innerHTML = `
 <canvas role="img" aria-label="Miss Express: la repartidora llega en neón y aparece el logo"${VISTA ? ' style="cursor:pointer"' : ''}></canvas>
-<button id="mx-intro-sonido" type="button" aria-label="Silenciar sonido" aria-pressed="false">
+<button id="mx-intro-sonido" type="button" aria-label="Activar sonido" aria-pressed="true">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/>
     <path class="onda" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>
@@ -362,6 +362,7 @@ function render(t, dt) {
    Agregado para el sitio: detener() apaga el sonido si la intro se cierra antes de terminar. */
 const MissExpressSonido = (() => {
   let AC = null, salida = null, reverb = null, bus = null, ruidoBuf = null, inicio = 0, mute = false, detenido = false;
+  let alCambiar = () => {}, enToque = false;   // alCambiar avisa al botón; enToque: el audio ya se rehízo dentro de un toque
 
   const A = window.AudioContext || window.webkitAudioContext;
   // los navegadores bloquean el audio hasta el primer toque: al tocar, se desbloquea y se sincroniza
@@ -376,8 +377,15 @@ const MissExpressSonido = (() => {
   }
   function desbloquear() {
     if (detenido) { GESTOS.forEach(g => removeEventListener(g, desbloquear, true)); return; }   // la intro ya se cerró
-    // Safari: un audio creado antes del toque puede quedar mudo aunque se reanude, así que se crea de nuevo dentro del toque
-    if (AC.state !== 'running') { const viejo = AC; construir(); try { viejo.close(); } catch { /* ya cerrado */ } }
+    // (una sola vez: un toque dispara pointerup, touchend y click, y no hay que rehacerlo en cada uno)
+    if (!enToque) {
+      enToque = true;
+      // iPhone con el interruptor de silencio puesto (iOS sin navigator.audioSession): un audio HTML mudo
+      // dentro del toque pasa la página a modo "reproducción" y así el Web Audio sí suena
+      try { const m = new Audio(wavMudo()); m.setAttribute('playsinline', ''); m.play().catch(() => {}); } catch { /* sin <audio> */ }
+      // Safari: un audio creado antes del toque puede quedar mudo aunque se reanude, así que se crea de nuevo dentro del toque
+      if (AC.state !== 'running') { const viejo = AC; construir(); try { viejo.close(); } catch { /* ya cerrado */ } }
+    }
     // un sonido vacío dentro del toque termina de desbloquear el audio en iPhone
     const s = AC.createBufferSource(); s.buffer = AC.createBuffer(1, 1, AC.sampleRate); s.connect(AC.destination); s.start(0);
     const ac = AC;
@@ -387,10 +395,20 @@ const MissExpressSonido = (() => {
       if (inicio) sonarSincronizado(false);
     }).catch(() => {});
   }
+  // 0,1 s de silencio en WAV (8 kHz, 8 bits), sin archivos aparte; la CSP del sitio lo permite con media-src data:
+  function wavMudo() {
+    const n = 800, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
+    const txt = (o, t) => { for (let i = 0; i < t.length; i++) b[o + i] = t.charCodeAt(i); };
+    txt(0, 'RIFF'); v.setUint32(4, 36 + n, true); txt(8, 'WAVEfmt '); v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true);
+    v.setUint16(32, 1, true); v.setUint16(34, 8, true); txt(36, 'data'); v.setUint32(40, n, true); b.fill(128, 44);
+    return 'data:audio/wav;base64,' + btoa(String.fromCharCode.apply(null, b));
+  }
   function construir() {
     // en iPhone, sin esto el interruptor de silencio apaga el sonido de la página
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* Safari viejo */ }
     AC = new A(); bus = null; ruidoBuf = null;
+    AC.onstatechange = () => alCambiar();
     salida = AC.createGain(); salida.gain.value = mute ? 0 : .9;
     const comp = AC.createDynamicsCompressor(); salida.connect(comp); comp.connect(AC.destination);
     reverb = AC.createConvolver();
@@ -532,7 +550,11 @@ const MissExpressSonido = (() => {
     silenciar(si = true) {
       mute = si;
       if (AC) salida.gain.setTargetAtTime(si ? 0 : .9, AC.currentTime, .02);
+      alCambiar();
     },
+    // true si de verdad se está oyendo: desbloqueado y sin silenciar
+    suena() { return !!AC && AC.state === 'running' && !mute; },
+    alCambiar(fn) { alCambiar = fn; },
     detener() {
       detenido = true;
       if (bus) { const viejo = bus; bus = null; viejo.gain.setTargetAtTime(0, AC.currentTime, .03); setTimeout(() => viejo.disconnect(), 400); }
@@ -576,12 +598,16 @@ function play() {
 
 // vista previa: tocar la pantalla vuelve a reproducir la animación
 if (VISTA) lienzo.addEventListener('click', play);
-// botón para silenciar o volver a activar el sonido
+// botón para silenciar o volver a activar el sonido. Mientras el navegador no deja sonar (iPhone antes del
+// primer toque) se ve tachado, así tocarlo activa el sonido en vez de silenciarlo
+function pintarBoton() {
+  const suena = MissExpressSonido.suena();
+  botonSonido.setAttribute('aria-pressed', String(!suena));
+  botonSonido.setAttribute('aria-label', suena ? 'Silenciar sonido' : 'Activar sonido');
+}
+MissExpressSonido.alCambiar(pintarBoton);
 botonSonido.addEventListener('click', () => {
-  const silencio = botonSonido.getAttribute('aria-pressed') !== 'true';
-  botonSonido.setAttribute('aria-pressed', String(silencio));
-  botonSonido.setAttribute('aria-label', silencio ? 'Activar sonido' : 'Silenciar sonido');
-  MissExpressSonido.silenciar(silencio);
+  MissExpressSonido.silenciar(botonSonido.getAttribute('aria-pressed') !== 'true');
 });
 function teclas(e) { if (e.key === 'Escape' && !VISTA) cerrar(0); }
 function alCambiarTamano() { medir(); if (terminado) render(DURATION, 0); }
@@ -594,6 +620,7 @@ function montar() {
   addEventListener('resize', alCambiarTamano);
   medir();
   MissExpressSonido.preparar();
+  pintarBoton();
   // espera a que carguen las imágenes; si decode() falla o no existe (navegadores viejos), se usa el evento load
   const cargada = i => new Promise(r => { if (i.complete && i.naturalWidth) r(); else { i.onload = r; i.onerror = r; } });
   const lista = i => (i.decode ? i.decode().catch(() => cargada(i)) : cargada(i));
