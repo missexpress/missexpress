@@ -11,8 +11,9 @@
    - Con "reducir movimiento" activado en el teléfono no se muestra.
    - Si las imágenes tardan más de 4 s en cargar, no se muestra (no hace esperar).
    - Botón de parlante abajo a la derecha: silenciar / activar. Tecla Esc: cierra la intro.
-     Los navegadores no dejan sonar audio hasta que la persona toca la pantalla:
-     al primer toque el sonido entra sincronizado con la animación.
+     Casi todos los navegadores (iPhone, Firefox) no dejan sonar audio hasta que la persona toca la pantalla:
+     en esos la intro espera en su primer cuadro con "Toca para entrar" y arranca con el toque, con sonido.
+     Donde sí se deja sonar (Chrome en la compu, muchas veces) arranca sola.
 
    Vista previa: img/intro.html (carga este mismo archivo con data-vista).
    Ahí no se quita al terminar y tocar la pantalla la repite.
@@ -47,7 +48,13 @@ estilo.textContent = `
   #mx-intro-sonido svg { width: 22px; height: 22px; }
   #mx-intro-sonido .x { display: none; }
   #mx-intro-sonido[aria-pressed="true"] .x { display: inline; }
-  #mx-intro-sonido[aria-pressed="true"] .onda { display: none; }`;
+  #mx-intro-sonido[aria-pressed="true"] .onda { display: none; }
+  #mx-intro-entrar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px;
+    padding: 14px 26px; border: 0; border-radius: 999px; background: #fff; color: #C2187A; font-family: inherit; font-size: 18px; font-weight: 700;
+    box-shadow: 0 4px 18px rgba(194,24,122,.3); cursor: pointer; white-space: nowrap; animation: mx-latido 1.6s ease-in-out infinite; }
+  #mx-intro-entrar svg { width: 18px; height: 18px; }
+  @keyframes mx-latido { 50% { transform: translate(-50%, -50%) scale(1.04); } }
+  #mx-intro [hidden] { display: none; }`;
 // visibility:visible porque la página nace oculta (clase fp) hasta que cargan las fuentes
 const capa = document.createElement('div');
 capa.id = 'mx-intro';
@@ -59,9 +66,14 @@ capa.innerHTML = `
     <path class="onda" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>
     <path class="x" d="m16 9 6 6m0-6-6 6"/>
   </svg>
+</button>
+<button id="mx-intro-entrar" type="button" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>
+  Toca para entrar
 </button>`;
 const lienzo = capa.querySelector('canvas');
 const botonSonido = capa.querySelector('#mx-intro-sonido');
+const botonEntrar = capa.querySelector('#mx-intro-entrar');
 const ctx = lienzo.getContext('2d');
 const html = document.documentElement, overflowAntes = html.style.overflow;
 
@@ -366,7 +378,7 @@ function render(t, dt) {
    detener() apaga el sonido si la intro se cierra antes de terminar. */
 const MissExpressSonido = (() => {
   let AC = null, salida = null, reverb = null, bus = null, ruidoBuf = null;
-  let pista = null, inicio = 0, mute = false, detenido = false, alCambiar = () => {};
+  let pista = null, inicio = 0, mute = false, detenido = false, probando = false, alCambiar = () => {};
 
   const O = window.OfflineAudioContext || window.webkitOfflineAudioContext;
   // los navegadores bloquean el audio hasta el primer toque: al tocar, arranca en el punto donde va la animación
@@ -469,21 +481,22 @@ const MissExpressSonido = (() => {
     tono(g, t, d * .07, { f: f * 9.2, v: v * .05 * brillo, a: .001 });
     soplo(g, t, .02, { f: 900, q: .5, v: v * .35, pico: .05 });
   }
-  // Scooter discreto: un zumbido suave que acelera al entrar y vuelve a ralentí al llegar al centro
+  // Scooter: un zumbido que acelera al entrar y vuelve a ralentí al llegar al centro
+  // (con un armónico medio para que se oiga en el parlante del teléfono, que casi no da graves)
   function moto(dest, t0, dur) {
     const fin = t0 + dur, acelera = t0 + dur * .3, llega = t0 + dur * .7;
     const g = AC.createGain(); g.gain.setValueAtTime(0, t0);
-    g.gain.linearRampToValueAtTime(.07, t0 + .1); g.gain.linearRampToValueAtTime(.11, acelera);
-    g.gain.setValueAtTime(.11, llega); g.gain.linearRampToValueAtTime(.05, fin - .2); g.gain.linearRampToValueAtTime(0, fin);
+    g.gain.linearRampToValueAtTime(.22, t0 + .1); g.gain.linearRampToValueAtTime(.36, acelera);
+    g.gain.setValueAtTime(.36, llega); g.gain.linearRampToValueAtTime(.17, fin - .2); g.gain.linearRampToValueAtTime(0, fin);
     g.connect(conPan(dest, t0, dur, -.8, 0));
-    // filtro cerrado: se oye redondo, sin aspereza
+    // filtro medio cerrado: se oye redondo, sin aspereza
     const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = .7; lp.connect(g);
-    lp.frequency.setValueAtTime(700, t0); lp.frequency.exponentialRampToValueAtTime(1300, acelera); lp.frequency.exponentialRampToValueAtTime(600, fin);
-    const hp = AC.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 120; hp.connect(lp);
+    lp.frequency.setValueAtTime(1200, t0); lp.frequency.exponentialRampToValueAtTime(2600, acelera); lp.frequency.exponentialRampToValueAtTime(1000, fin);
+    const hp = AC.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 180; hp.connect(lp);
     const mezcla = AC.createGain(); mezcla.gain.value = .8; mezcla.connect(hp);
     // revoluciones: ralentí, acelerón suave y de vuelta a ralentí
     const rpm = (p, k) => { p.setValueAtTime(80 * k, t0); p.exponentialRampToValueAtTime(150 * k, acelera); p.exponentialRampToValueAtTime(135 * k, llega); p.exponentialRampToValueAtTime(85 * k, fin); };
-    [[1, 'sawtooth', .5], [1.005, 'triangle', .5]].forEach(([k, tipo, v]) => {
+    [[1, 'sawtooth', .5], [1.005, 'triangle', .5], [2, 'square', .18]].forEach(([k, tipo, v]) => {
       const o = AC.createOscillator(), og = AC.createGain(); o.type = tipo; og.gain.value = v; rpm(o.frequency, k);
       o.connect(og); og.connect(mezcla); o.start(t0); o.stop(fin + .05);
     });
@@ -536,7 +549,23 @@ const MissExpressSonido = (() => {
       escuchar(true);
     },
     grabar,
-    reproducir() { inicio = performance.now(); detenido = false; if (pista) pista.pause(); intentar(); },
+    // ¿el navegador deja sonar sin que la persona haya tocado? (Chrome en la compu muchas veces sí; iPhone y Firefox no)
+    permitido() {
+      if (!pista) return Promise.resolve(false);
+      if (navigator.getAutoplayPolicy) { try { return Promise.resolve(navigator.getAutoplayPolicy(pista) === 'allowed'); } catch { /* sigue abajo */ } }
+      pista.volume = 0; probando = true;                  // se prueba en silencio
+      const p = pista.play();
+      // si la intro ya arrancó (respuesta tardía), no hay que tocar la pista
+      const listo = si => { if (probando) { probando = false; pista.pause(); pista.volume = 1; try { pista.currentTime = 0; } catch { /* sin cargar */ } } return si; };
+      // si el archivo tarda en cargar, no se hace esperar: se pide el toque
+      const plazo = new Promise(r => setTimeout(() => r(false), 1500));
+      return Promise.race([p && p.then ? p.then(() => listo(true), () => listo(false)) : Promise.resolve(listo(false)), plazo]);
+    },
+    reproducir() {
+      inicio = performance.now(); detenido = false; probando = false;
+      if (pista) { pista.pause(); pista.volume = 1; }
+      intentar();
+    },
     silenciar(si = true) { mute = si; if (pista) pista.muted = si; alCambiar(); },
     // true si de verdad se está oyendo: sonando y sin silenciar
     suena() { return !!pista && !pista.paused && !mute; },
@@ -573,14 +602,30 @@ function cerrar(espera = 0) {
 function play() {
   last = null; terminado = false; particles = [];
   if (reduceMotion) { render(DURATION, 0); terminado = true; return; }   // solo llega aquí en la vista previa
+  // si el navegador no deja sonar hasta que la persona toque (iPhone, Firefox), la intro espera en su primer
+  // cuadro con "Toca para entrar" y arranca con ese toque: así el sonido se oye completo desde el principio
+  render(A_INICIO, 0);
+  MissExpressSonido.permitido().then(si => { if (!cerrada) (si ? arrancar() : pedirToque()); });
+}
+function arrancar() {
   // la animación y el sonido parten del mismo instante
   start = performance.now();
   MissExpressSonido.reproducir();
   requestAnimationFrame(frame);
 }
+let esperando = false;
+function pedirToque() {
+  esperando = true;
+  botonSonido.hidden = true; botonEntrar.hidden = false; botonEntrar.focus();
+  capa.addEventListener('click', function alTocar() {
+    capa.removeEventListener('click', alTocar);
+    esperando = false; botonEntrar.hidden = true; botonSonido.hidden = false;
+    arrancar();                                           // dentro del toque: el navegador deja sonar
+  });
+}
 
 // vista previa: tocar la pantalla vuelve a reproducir la animación
-if (VISTA) lienzo.addEventListener('click', play);
+if (VISTA) lienzo.addEventListener('click', () => { if (!esperando) play(); });
 // vista previa con ?grabar: descarga intro-sonido.wav, el sonido que usa el sitio
 if (VISTA && params.has('grabar')) MissExpressSonido.grabar(datos => {
   const a = document.createElement('a');
